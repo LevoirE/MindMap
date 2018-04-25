@@ -22,7 +22,12 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".WorkActivity"></activity>
+        <activity android:name=".WorkActivity"
+            android:label="@string/title_activity_work" />
+        <activity android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".BacketActivity"
+            android:label="@string/title_activity_backet"></activity>
     </application>
 
 </manifest>

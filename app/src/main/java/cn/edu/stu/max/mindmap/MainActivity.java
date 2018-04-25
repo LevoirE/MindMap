@@ -42,10 +42,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_setting:
-                Toast.makeText(this, "你点击了“设置”按键！", Toast.LENGTH_SHORT).show();
+                Intent intent_setting = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent_setting);
                 return true;
             case R.id.menu_about:
                 Toast.makeText(this, "你点击了“关于”按键！", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_backet:
+                Intent intent_backet = new Intent(MainActivity.this, BacketActivity.class);
+                startActivity(intent_backet);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
