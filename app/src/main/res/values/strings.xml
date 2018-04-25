@@ -5,4 +5,6 @@
     <string name="title_activity_hello">HelloActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_setting">设置</string>
+    <string name="title_about">关于</string>
 </resources>
