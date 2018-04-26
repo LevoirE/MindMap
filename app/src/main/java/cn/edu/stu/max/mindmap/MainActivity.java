@@ -2,6 +2,7 @@ package cn.edu.stu.max.mindmap;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -57,12 +58,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    boolean isDoubleBack = false;
+
     @Override
     public void onBackPressed() {
-        // super.onBackPressed(); 	不要调用父类的方法
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        startActivity(intent);
+        if (isDoubleBack) {
+            // super.onBackPressed(); 	不要调用父类的方法
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+        }
+        this.isDoubleBack = true;
+        Toast.makeText(this, "再按一次返回键退出", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 2s = 2000ms
+                isDoubleBack = false;
+            }
+        }, 2000);
     }
 }
