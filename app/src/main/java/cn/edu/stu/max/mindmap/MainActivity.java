@@ -1,10 +1,12 @@
 package cn.edu.stu.max.mindmap;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -47,8 +49,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent_setting);
                 return true;
             case R.id.menu_about:
-                Toast.makeText(this, "你点击了“关于”按键！", Toast.LENGTH_SHORT).show();
-                return true;
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.message_about)
+                        .setNegativeButton(R.string.btn_close, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        }).create().show();
+            return true;
             case R.id.menu_backet:
                 Intent intent_backet = new Intent(MainActivity.this, BacketActivity.class);
                 startActivity(intent_backet);

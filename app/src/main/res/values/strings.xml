@@ -7,4 +7,6 @@
     <string name="title_activity_work">工作区</string>
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_backet">回收站</string>
+    <string name="btn_close">关闭</string>
+    <string name="message_about">本应用是简易的思维导图工具</string>
 </resources>
