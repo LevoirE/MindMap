@@ -18,6 +18,7 @@ public class WorkActivity extends AppCompatActivity {
     private ScaleGestureDetector scaleGestureDetector = null;
     private int mActivePointerId;
     private int INVALID_POINTER_ID;
+    private static final String TAG = "WorkActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,7 @@ public class WorkActivity extends AppCompatActivity {
         final int action = MotionEventCompat.getActionMasked(event);
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
+                Log.d(TAG, "onTouchEvent: ACTION_DOWN");
                 final int pointerIndex = MotionEventCompat.getActionIndex(event);
                 final float x = MotionEventCompat.getX(event, pointerIndex);
                 final float y = MotionEventCompat.getY(event, pointerIndex);
@@ -54,6 +56,7 @@ public class WorkActivity extends AppCompatActivity {
             }
 
             case MotionEvent.ACTION_MOVE: {
+                Log.d(TAG, "onTouchEvent: ACTION_MOVE");
                 // Find the index of the active pointer and fetch its position
                 final int pointerIndex =
                         MotionEventCompat.findPointerIndex(event, mActivePointerId);
@@ -65,7 +68,7 @@ public class WorkActivity extends AppCompatActivity {
                 final float dx = x - mLastTouchX;
                 final float dy = y - mLastTouchY;
 
-
+                ((ViewGroup)findViewById(android.R.id.content)).getChildAt(0).scrollBy(-(int)dx, -(int)dy);
                 // Remember this touch position for the next move event
                 mLastTouchX = x;
                 mLastTouchY = y;
