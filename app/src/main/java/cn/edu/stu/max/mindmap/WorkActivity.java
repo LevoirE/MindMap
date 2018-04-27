@@ -38,15 +38,15 @@ public class WorkActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        scaleGestureDetector.onTouchEvent(event);
-        final int action = MotionEventCompat.getActionMasked(event);
-        switch (action) {
+        if (event.getPointerCount() > 1)
+            return scaleGestureDetector.onTouchEvent(event);
+
+        final int pointerIndex = MotionEventCompat.getActionIndex(event);
+        final float x = MotionEventCompat.getX(event, pointerIndex);
+        final float y = MotionEventCompat.getY(event, pointerIndex);
+        switch (MotionEventCompat.getActionMasked(event)) {
             case MotionEvent.ACTION_DOWN: {
                 Log.d(TAG, "onTouchEvent: ACTION_DOWN");
-                final int pointerIndex = MotionEventCompat.getActionIndex(event);
-                final float x = MotionEventCompat.getX(event, pointerIndex);
-                final float y = MotionEventCompat.getY(event, pointerIndex);
-
                 // Remember where we started (for dragging)
                 mLastTouchX = x;
                 mLastTouchY = y;
@@ -57,13 +57,6 @@ public class WorkActivity extends AppCompatActivity {
 
             case MotionEvent.ACTION_MOVE: {
                 Log.d(TAG, "onTouchEvent: ACTION_MOVE");
-                // Find the index of the active pointer and fetch its position
-                final int pointerIndex =
-                        MotionEventCompat.findPointerIndex(event, mActivePointerId);
-
-                final float x = MotionEventCompat.getX(event, pointerIndex);
-                final float y = MotionEventCompat.getY(event, pointerIndex);
-
                 // Calculate the distance moved
                 final float dx = x - mLastTouchX;
                 final float dy = y - mLastTouchY;
@@ -73,32 +66,6 @@ public class WorkActivity extends AppCompatActivity {
                 mLastTouchX = x;
                 mLastTouchY = y;
 
-                break;
-            }
-
-            case MotionEvent.ACTION_UP: {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
-
-            case MotionEvent.ACTION_CANCEL: {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
-
-            case MotionEvent.ACTION_POINTER_UP: {
-
-                final int pointerIndex = MotionEventCompat.getActionIndex(event);
-                final int pointerId = MotionEventCompat.getPointerId(event, pointerIndex);
-
-                if (pointerId == mActivePointerId) {
-                    // This was our active pointer going up. Choose a new
-                    // active pointer and adjust accordingly.
-                    final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-                    mLastTouchX = MotionEventCompat.getX(event, newPointerIndex);
-                    mLastTouchY = MotionEventCompat.getY(event, newPointerIndex);
-                    mActivePointerId = MotionEventCompat.getPointerId(event, newPointerIndex);
-                }
                 break;
             }
         }
@@ -116,33 +83,18 @@ public class WorkActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private final class ScaleGestureListener implements
-            ScaleGestureDetector.OnScaleGestureListener {
+    private final class ScaleGestureListener extends
+            ScaleGestureDetector.SimpleOnScaleGestureListener {
         private float scaleFactor = 1.0f;
-        private float preScaleFactor = 1.0f;
 
         @Override
         public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
-            float previousSpan = scaleGestureDetector.getPreviousSpan();
-            float currentSpan = scaleGestureDetector.getCurrentSpan();
-            if (currentSpan < previousSpan) {
-                scaleFactor = preScaleFactor - (previousSpan - currentSpan) / 2000;
-            } else {
-                scaleFactor = preScaleFactor + (currentSpan - previousSpan) / 2000;
-            }
+            scaleFactor *= scaleGestureDetector.getScaleFactor();
+            scaleFactor = Math.max(0.5f, Math.min(scaleFactor, 2.0f));
+            Log.d(TAG, "onScale: " + scaleFactor);
             ((ViewGroup)findViewById(android.R.id.content)).getChildAt(0).setScaleX(scaleFactor);
             ((ViewGroup)findViewById(android.R.id.content)).getChildAt(0).setScaleY(scaleFactor);
-            return false;
-        }
-
-        @Override
-        public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
             return true;
-        }
-
-        @Override
-        public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
-            preScaleFactor = scaleFactor;
         }
     }
 

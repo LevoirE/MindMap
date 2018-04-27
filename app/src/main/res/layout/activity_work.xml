@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:background="@color/colorAccent"
     tools:context="cn.edu.stu.max.mindmap.WorkActivity">
 
     <EditText
